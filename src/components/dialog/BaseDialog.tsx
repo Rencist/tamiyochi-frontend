@@ -139,7 +139,7 @@ export default function BaseDialog({
                 </Button>
                 <Button
                   type='button'
-                  variant='outline'
+                  variant='secondary'
                   onClick={onClose}
                   className='!font-medium justify-center items-center mt-3 w-full sm:mt-0 sm:w-auto sm:text-sm'
                 >

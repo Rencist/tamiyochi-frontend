@@ -5,18 +5,18 @@ import { DefaultSeoProps } from 'next-seo';
 const config: DefaultSeoProps = {
   openGraph: {
     type: 'website',
-    locale: 'en_IE',
-    url: 'https://www.robbypambudi.com/',
-    siteName: 'SiteName',
+    locale: 'en_US',
+    url: 'https://www.tamiyochi.com',
+    siteName: 'Tamiyochi',
   },
   twitter: {
     handle: '@handle',
     site: '@site',
     cardType: 'summary_large_image',
   },
-  titleTemplate: '%s | RobbyPambudi',
-  description: 'this is a description',
-  defaultTitle: 'RobbyPambudi',
+  titleTemplate: '%s | Tamiyochi',
+  description: 'Tamiyochi: The Largest Manga Libary in Indonesia',
+  defaultTitle: 'Tamiyochi',
   additionalLinkTags: [
     {
       rel: 'icon',

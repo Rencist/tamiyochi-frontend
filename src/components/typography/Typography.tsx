@@ -3,86 +3,74 @@ import * as React from 'react';
 import clsxm from '@/lib/clsxm';
 
 enum TypographyVariant {
-  'h0',
   'h1',
   'h2',
   'h3',
   'h4',
   'h5',
   'h6',
-  't',
   'p',
-  'b1',
-  'b2',
   'c',
 }
 
-enum TypographyColor {
-  'primary',
-  'secondary',
-  'tertiary',
-  'danger',
-  'success',
-}
-
 enum FontVarinat {
-  'upakarti',
   'montserrat',
+  'open-sans',
 }
 
 type TypographyProps<T extends React.ElementType> = {
   /** @default <p> tag */
   as?: T;
   className?: string;
-  color?: keyof typeof TypographyColor;
-  font: keyof typeof FontVarinat;
-  variant: keyof typeof TypographyVariant;
+  font?: keyof typeof FontVarinat;
+  variant?: keyof typeof TypographyVariant;
   children: React.ReactNode;
-} & React.ComponentProps<T>;
+};
 
 export default function Typography<T extends React.ElementType>({
   as,
   children,
   className,
-  color = 'primary',
-  font = 'montserrat',
-  variant,
+  font = 'open-sans',
+  variant = 'p',
   ...rest
-}: TypographyProps<T>) {
+}: TypographyProps<T> &
+  Omit<React.ComponentPropsWithoutRef<T>, keyof TypographyProps<T>>) {
   const Component = as || 'p';
   return (
     <Component
       className={clsxm(
-        //#region  //*=========== Variants ===========
         [
-          variant === 'h0' && [
-            'font-bold text-[96px] sm:text-[128px] md:text-[196px]',
+          variant === 'h1' && [
+            'text-[48px] leading-[64px]',
+            'md:text-[72px] md:leading-[96px]',
           ],
-          variant === 'h1' && ['text-[64px] md:text-[80px]'],
-          variant === 'h2' && ['text-[48px] md:text-[72px]'],
-          variant === 'h3' && ['text-[32px] md:text-[64px]'],
-          variant === 'h4' && ['text-[24px] md:text-[48px]'],
-          variant === 'h5' && ['text-[20px] md:text-[32px]'],
-          variant === 'h6' && ['text-[16px] md:text-[24px]'],
-          variant === 't' && ['text-[20px]'],
-          variant === 'p' && ['text-sm md:text-[18px] leading-[24px]'],
-          variant === 'b1' && ['text-[16px]'],
-          variant === 'b2' && ['text-[16px]'],
-          variant === 'c' && ['text-[14px]'],
+          variant === 'h2' && [
+            'text-[40px] leading-[52px]',
+            'md:text-[64px] md:leading-[80px]',
+          ],
+          variant === 'h3' && [
+            'text-[32px] leading-[42px]',
+            'md:text-[48px] md:leading-[64px]',
+          ],
+          variant === 'h4' && [
+            'text-[24px] leading-[32px]',
+            'md:text-[40px] md:leading-[52px]',
+          ],
+          variant === 'h5' && [
+            'text-[20px] leading-[26px]',
+            'md:text-[32px] md:leading-[42px]',
+          ],
+          variant === 'h6' && [
+            'text-[18px] leading-[24px]',
+            'md:text-[24px] md:leading-[32px]',
+          ],
+          variant === 'p' && ['text-[16px] leading-[24px]'],
+          variant === 'c' && ['text-[14px] leading-[24px]'],
         ],
-
-        //#region  //*=========== Color ===========
         [
-          color === 'primary' && ['text-typo'],
-          color === 'secondary' && ['text-typo-secondary'],
-          color === 'tertiary' && ['text-typo-tertiary'],
-          color === 'danger' && ['text-danger-400'],
-          color === 'success' && ['text-success-600'],
-        ],
-        //#endregion  //*======== Color ===========
-        [
-          font === 'upakarti' && ['font-primary leading-none'],
-          font === 'montserrat' && ['font-secondary'],
+          font === 'montserrat' && ['font-primary'],
+          font === 'open-sans' && ['font-secondary'],
         ],
         className
       )}
