@@ -134,11 +134,11 @@ export default function DropzoneInput({
     <div className='w-full space-y-1.5'>
       {label && (
         <label htmlFor={id} className='flex space-x-1'>
-          <Typography className='font-semibold text-base-primary'>
+          <Typography className='font-semibold text-teal-600'>
             {label}
           </Typography>
           {validation?.required && (
-            <Typography className='text-red'>*</Typography>
+            <Typography className='text-red-200'>*</Typography>
           )}
         </label>
       )}
@@ -157,32 +157,32 @@ export default function DropzoneInput({
               <input {...getInputProps()} />
               <div
                 className={clsxm(
-                  'w-full cursor-pointer bg-base-surface rounded-md',
+                  'w-full cursor-pointer bg-yellow-50 rounded-md',
                   'flex flex-col items-center space-y-2 px-3 py-8',
-                  'border-dashed border-2 border-base-inline',
+                  'border-dashed border-2 border-teal-600 border-opacity-25',
                   error
-                    ? 'border-red group-focus:border-red'
-                    : 'group-focus:border-blue',
+                    ? 'border-red-200 group-focus:border-red-200 border-opacity-100'
+                    : 'group-focus:border-teal-600',
                   className
                 )}
               >
-                <div className='w-8 h-8 text-base-icon'>
+                <div className='w-8 h-8 text-teal-400'>
                   <MdOutlineAddPhotoAlternate className='w-full h-full' />
                 </div>
 
                 <div className='flex flex-col items-center'>
-                  <Typography className='text-center text-base-icon'>
-                    <span className='font-semibold underline text-blue'>
+                  <Typography className='text-center text-teal-600 text-opacity-75'>
+                    <span className='font-semibold underline text-teal-600'>
                       Klik untuk upload
                     </span>{' '}
                     atau drag and drop
                   </Typography>
-                  <Typography className='text-center text-base-icon'>
+                  <Typography className='text-center text-teal-600 text-opacity-75'>
                     {acceptTypes}
                   </Typography>
                 </div>
 
-                <Typography className='text-center text-blue'>
+                <Typography className='text-xs font-semibold text-center text-teal-600'>
                   Tersisa {maxFiles - files?.length} file lagi
                 </Typography>
               </div>

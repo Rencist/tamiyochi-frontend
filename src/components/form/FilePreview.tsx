@@ -1,11 +1,8 @@
 import 'react-image-lightbox/style.css';
 
 import * as React from 'react';
-import {
-  HiOutlineExternalLink,
-  HiOutlineEye,
-  HiOutlineTrash,
-} from 'react-icons/hi';
+import { HiOutlineExternalLink, HiOutlineTrash } from 'react-icons/hi';
+import { IoMdEye } from 'react-icons/io';
 import { TbFileText } from 'react-icons/tb';
 import Lightbox from 'react-image-lightbox';
 
@@ -39,32 +36,39 @@ export default function FilePreview({
   return (
     <li
       key={file.name}
-      className='w-full flex items-center space-x-2 p-3 bg-base-surface rounded-md'
+      className='w-full flex items-center space-x-2 p-3 bg-yellow-50 rounded-md'
     >
       <div className='w-6 h-6'>
-        <TbFileText className='w-full h-full text-base-label' />
+        <TbFileText className='w-full h-full text-teal-400' />
       </div>
 
-      <Typography className='flex-1 text-base-primary truncate'>
+      <Typography variant='c' className='flex-1 text-teal-600 truncate'>
         {file.name}
       </Typography>
 
       {imageTypes.includes(file.type) ? (
         <Button
-          icon={HiOutlineEye}
-          variant='secondary'
+          icon={IoMdEye}
+          size='small'
+          variant='primary'
           onClick={() => setIsOpen(true)}
         />
       ) : (
         <ButtonLink
           href={file.preview}
           icon={HiOutlineExternalLink}
-          variant='secondary'
+          size='small'
+          variant='primary'
         />
       )}
 
       {!readOnly && (
-        <Button icon={HiOutlineTrash} variant='danger' onClick={handleDelete} />
+        <Button
+          icon={HiOutlineTrash}
+          size='small'
+          variant='danger'
+          onClick={handleDelete}
+        />
       )}
 
       {isOpen && (

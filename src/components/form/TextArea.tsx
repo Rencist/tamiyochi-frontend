@@ -44,11 +44,11 @@ export default function TextArea({
     <div className='w-full space-y-1.5'>
       {label && (
         <label htmlFor={id} className='flex space-x-1'>
-          <Typography className='font-semibold text-base-primary'>
+          <Typography className='font-semibold text-teal-600'>
             {label}
           </Typography>
           {validation?.required && (
-            <Typography className='text-red'>*</Typography>
+            <Typography className='text-red-200'>*</Typography>
           )}
         </label>
       )}
@@ -64,13 +64,13 @@ export default function TextArea({
           onChange={handleChange}
           className={clsxm(
             'w-full px-3 py-2.5 rounded-md',
-            'border-none focus:ring-2 focus:ring-inset',
-            'bg-base-surface font-secondary text-base-primary',
-            'placeholder:font-secondary placeholder:text-base-icon',
+            'border-none focus:ring-1 focus:ring-inset',
+            'bg-yellow-50 font-secondary text-teal-600',
+            'placeholder:font-secondary placeholder:text-teal-600 placeholder:text-opacity-25',
             readOnly && 'cursor-not-allowed',
             error
-              ? 'focus:ring-red ring-1 ring-inset ring-red'
-              : 'focus:ring-blue',
+              ? 'focus:ring-red-200 ring-1 ring-inset ring-red-200'
+              : 'focus:ring-teal-600',
             className
           )}
           aria-describedby={id}

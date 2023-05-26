@@ -51,18 +51,18 @@ export default function Input({
     <div className='w-full space-y-1.5'>
       {label && (
         <label htmlFor={id} className='flex space-x-1'>
-          <Typography className='font-semibold text-base-primary'>
+          <Typography className='font-semibold text-teal-600'>
             {label}
           </Typography>
           {validation?.required && (
-            <Typography className='text-red'>*</Typography>
+            <Typography className='text-red-200'>*</Typography>
           )}
         </label>
       )}
 
       <div className='w-full flex items-stretch'>
         {prefix && (
-          <Typography className='p-3 bg-base-light text-base-secondary rounded-l-md'>
+          <Typography className='p-3 bg-yellow-200 text-teal-600 text-opacity-50 rounded-l-md'>
             {prefix}
           </Typography>
         )}
@@ -94,13 +94,13 @@ export default function Input({
               'w-full h-full px-3 py-2.5 rounded-md',
               [LeftIcon && 'pl-9', RightIcon && 'pr-9'],
               [prefix && 'rounded-l-none', suffix && 'rounded-r-none'],
-              'border-none focus:ring-2 focus:ring-inset',
-              'bg-base-surface font-secondary text-base-primary',
-              'placeholder:font-secondary placeholder:text-base-icon',
+              'border-none focus:ring-1 focus:ring-inset',
+              'bg-yellow-50 font-secondary text-teal-600',
+              'placeholder:font-secondary placeholder:text-teal-600 placeholder:text-opacity-25',
               readOnly && 'cursor-not-allowed',
               error
-                ? 'focus:ring-red ring-1 ring-inset ring-red'
-                : 'focus:ring-blue',
+                ? 'focus:ring-red-200 ring-1 ring-inset ring-red-200'
+                : 'focus:ring-teal-600',
               className
             )}
             aria-describedby={id}
@@ -112,7 +112,7 @@ export default function Input({
               className={clsxm(
                 'absolute bottom-0 right-0 h-full',
                 'flex justify-center items-center pr-3',
-                'text-base-icon text-lg md:text-xl',
+                'text-teal-600 text-opacity-50 text-lg md:text-xl',
                 rightIconClassName
               )}
             >
@@ -136,7 +136,7 @@ export default function Input({
         </div>
 
         {suffix && (
-          <Typography className='p-3 bg-base-light text-base-secondary rounded-r-md'>
+          <Typography className='p-3 bg-yellow-200 text-teal-600 text-opacity-50 rounded-r-md'>
             {suffix}
           </Typography>
         )}

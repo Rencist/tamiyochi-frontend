@@ -44,7 +44,7 @@ export default function FormSandbox() {
 
   return (
     <div className='p-6 space-y-4'>
-      <Typography as='h1' variant='h4' font='saoTorpes'>
+      <Typography as='h1' variant='h4' font='montserrat'>
         Form
       </Typography>
 
@@ -144,6 +144,13 @@ export default function FormSandbox() {
           />
 
           <TextArea
+            id='textareaWithValidation'
+            label='Text Area With Validation'
+            placeholder='Write long text here'
+            validation={{ required: 'This field is required' }}
+          />
+
+          <TextArea
             id='textareaReadOnly'
             label='Text Area'
             readOnly
@@ -161,6 +168,19 @@ export default function FormSandbox() {
               'application/pdf': ['.pdf'],
             }}
             maxFiles={3}
+          />
+
+          <DropzoneInput
+            id='dropzoneWithValidation'
+            label='File Dropzone With Validation'
+            helperText='You can upload file with .jpg, .jpeg, .png, or .pdf extension.'
+            acceptTypes='JPG, JPEG, PNG, atau PDF'
+            accept={{
+              'image/*': ['.jpg', '.jpeg', '.png'],
+              'application/pdf': ['.pdf'],
+            }}
+            maxFiles={3}
+            validation={{ required: 'This field is required' }}
           />
 
           <Button type='submit' className='w-full'>
