@@ -44,7 +44,7 @@ export default function FormSandbox() {
 
   return (
     <div className='p-6 space-y-4'>
-      <Typography as='h1' variant='h4' font='montserrat'>
+      <Typography as='h1' variant='h1' font='montserrat' className='font-bold'>
         Form
       </Typography>
 
@@ -113,7 +113,12 @@ export default function FormSandbox() {
             readOnly
             value='This is read only'
           />
-          <Input id='passwordInput' label='Password' type='password' />
+          <Input
+            id='passwordInput'
+            label='Password'
+            type='password'
+            placeholder='Enter Password'
+          />
 
           <SelectInput
             id='select'

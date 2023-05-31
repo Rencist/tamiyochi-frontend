@@ -38,20 +38,20 @@ export default function FilePreview({
   return (
     <li
       key={file.name}
-      className='w-full flex items-center space-x-2 p-3 bg-yellow-50 rounded-md'
+      className='w-full flex items-center space-x-2 p-3 bg-base-light rounded-md'
     >
       <div className='w-6 h-6'>
-        <TbFileText className='w-full h-full text-teal-400' />
+        <TbFileText className='w-full h-full text-base-icon' />
       </div>
 
-      <Typography variant='c' className='flex-1 text-teal-600 truncate'>
+      <Typography variant='c' className='flex-1 text-base-primary truncate'>
         {file.name}
       </Typography>
 
       {imageTypes.includes(file.type) ? (
         <Button
           icon={IoMdEye}
-          size='small'
+          size='base'
           variant='primary'
           onClick={() => setIsOpen(true)}
         />
@@ -59,7 +59,7 @@ export default function FilePreview({
         <ButtonLink
           href={file.preview}
           icon={HiOutlineExternalLink}
-          size='small'
+          size='base'
           openNewTab={true}
           target='_blank'
           variant='primary'
@@ -69,7 +69,7 @@ export default function FilePreview({
       {!readOnly && (
         <Button
           icon={HiOutlineTrash}
-          size='small'
+          size='base'
           variant='danger'
           onClick={handleDelete}
         />

@@ -41,7 +41,7 @@ export default function SelectInput({
     <div className='w-full space-y-1.5'>
       {label && (
         <label htmlFor={id} className='flex space-x-1'>
-          <Typography className='font-semibold text-teal-600'>
+          <Typography className='font-semibold text-base-primary'>
             {label}
           </Typography>
           {validation?.required && (
@@ -59,12 +59,13 @@ export default function SelectInput({
         className={clsxm(
           'w-full pl-3 pr-8 py-2.5 rounded-md truncate',
           'border-none focus:ring-1 focus:ring-inset',
-          'bg-yellow-50 font-secondary text-teal-600',
-          readOnly && 'cursor-not-allowed',
+          'bg-base-light font-secondary text-base-primary',
+          'cursor-pointer',
+          readOnly && 'cursor-default',
           error
-            ? 'focus:ring-red-200 ring-1 ring-inset ring-red-200'
-            : 'focus:ring-teal-600',
-          !value && !readOnly && 'text-teal-600 text-opacity-25',
+            ? 'focus:ring-red-200 focus:ring-2 ring-1 ring-inset ring-red-200'
+            : 'focus:ring-teal',
+          !value && !readOnly && 'text-base-icon',
           className
         )}
         aria-describedby={id}

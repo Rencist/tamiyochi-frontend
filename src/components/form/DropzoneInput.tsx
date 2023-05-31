@@ -134,7 +134,7 @@ export default function DropzoneInput({
     <div className='w-full space-y-1.5'>
       {label && (
         <label htmlFor={id} className='flex space-x-1'>
-          <Typography className='font-semibold text-teal-600'>
+          <Typography className='font-semibold text-base-primary'>
             {label}
           </Typography>
           {validation?.required && (
@@ -157,32 +157,32 @@ export default function DropzoneInput({
               <input {...getInputProps()} />
               <div
                 className={clsxm(
-                  'w-full cursor-pointer bg-yellow-50 rounded-md',
+                  'w-full cursor-pointer bg-base-light rounded-md',
                   'flex flex-col items-center space-y-2 px-3 py-8',
-                  'border-dashed border-2 border-teal-600 border-opacity-25',
+                  'border-dashed border-2 border-base-icon',
                   error
-                    ? 'border-red-200 group-focus:border-red-200 border-opacity-100'
+                    ? 'border-red-200 group-focus:border-red-200'
                     : 'group-focus:border-teal-600',
                   className
                 )}
               >
-                <div className='w-8 h-8 text-teal-400'>
+                <div className='w-8 h-8 text-base-icon'>
                   <MdOutlineAddPhotoAlternate className='w-full h-full' />
                 </div>
 
                 <div className='flex flex-col items-center'>
-                  <Typography className='text-center text-teal-600 text-opacity-75'>
-                    <span className='font-semibold underline text-teal-600'>
+                  <Typography className='text-center text-base-primary'>
+                    <span className='font-semibold underline text-teal'>
                       Klik untuk upload
                     </span>{' '}
                     atau drag and drop
                   </Typography>
-                  <Typography className='text-center text-teal-600 text-opacity-75'>
+                  <Typography className='text-center text-base-icon'>
                     {acceptTypes}
                   </Typography>
                 </div>
 
-                <Typography className='text-xs font-semibold text-center text-teal-600'>
+                <Typography className='text-xs font-semibold text-center text-base-icon'>
                   Tersisa {maxFiles - files?.length} file lagi
                 </Typography>
               </div>
