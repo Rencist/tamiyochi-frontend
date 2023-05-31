@@ -2,27 +2,34 @@ import * as React from 'react';
 import { IconType } from 'react-icons';
 import { ImSpinner2 } from 'react-icons/im';
 
+import Typography from '@/components/typography/Typography';
 import clsxm from '@/lib/clsxm';
 
 enum ButtonVariant {
   'primary',
-  'outline',
+  'secondary',
+  'warning',
   'danger',
-  'ghost',
-}
-enum ButtonSize {
-  'sm',
-  'base',
+  'unstyled',
 }
 
-type ButtonProps = {
+enum ButtonSize {
+  'large',
+  'base',
+  'small',
+}
+
+export type ButtonProps = {
   isLoading?: boolean;
   size?: keyof typeof ButtonSize;
   variant?: keyof typeof ButtonVariant;
+  icon?: IconType;
+  iconClassName?: string;
   leftIcon?: IconType;
   rightIcon?: IconType;
   leftIconClassName?: string;
   rightIconClassName?: string;
+  textClassName?: string;
 } & React.ComponentPropsWithRef<'button'>;
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -34,10 +41,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       isLoading,
       size = 'base',
       variant = 'primary',
+      icon: Icon,
       leftIcon: LeftIcon,
       rightIcon: RightIcon,
+      iconClassName,
       leftIconClassName,
       rightIconClassName,
+      textClassName,
       ...rest
     },
     ref
@@ -50,50 +60,48 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type='button'
         disabled={disabled}
         className={clsxm(
-          'button inline-flex items-center justify-center rounded-lg',
-          'focus:outline-none focus-visible:ring focus-visible:ring-primary-500',
+          'button flex items-center justify-center gap-1 rounded-md',
+          'focus:outline-none focus-visible:outline focus-visible:outline-teal',
+          'disabled:cursor-default',
           'transition-colors duration-75',
-          //#region  //*=========== Size ===========
           [
-            size === 'base' && [
-              'min-h-[34px] py-1.5 px-2.5 font-bold md:min-h-[42px] md:py-2 md:px-3',
-              'text-sm md:text-base',
+            size === 'large' && [
+              'min-h-[44px] px-[28px] py-[10px]',
+              Icon && 'px-[10px]',
             ],
-            size === 'sm' && [
-              'min-h-[30px] py-1 px-1.5 font-semibold md:min-h-[34px] md:py-1.5 md:px-2',
-              'text-xs md:text-sm',
+            size === 'base' && [
+              'min-h-[36px] px-[24px] py-[6px]',
+              Icon && 'px-[6px]',
+            ],
+            size === 'small' && [
+              'min-h-[32px] px-[20px] py-[4px]',
+              Icon && 'px-[4px]',
             ],
           ],
-          //#endregion  //*======== Size ===========
-          //#region  //*=========== Variants ===========
           [
             variant === 'primary' && [
-              'border border-blue-500',
-              'disabled:bg-blue-100 disabled:border-blue-300',
-              'hover:bg-blue-600 active:bg-blue-700 hover:text-white',
+              'bg-teal text-base-surface',
+              'hover:bg-teal-500 active:bg-teal-600',
+              'disabled:bg-teal-500 disabled:text-teal-400',
             ],
-            variant === 'outline' && [
-              'text-typo-secondary',
-              'border border-typo-outline',
-              'hover:bg-secondary-200 active:bg-secondary-400',
-              'disabled:bg-secondary-300 disabled:brightness-95',
+            variant === 'secondary' && [
+              'bg-base-surface ring-2 ring-inset ring-teal text-teal',
+              'hover:bg-teal hover:text-base-surface',
+              'active:bg-teal-500 active:text-base-surface active:ring-teal-500',
+              'disabled:bg-base-surface disabled:text-base-inline',
+            ],
+            variant === 'warning' && [
+              'bg-orange text-base-surface',
+              'hover:bg-orange-500 active:bg-orange-600',
+              'disabled:bg-orange-500 disabled:text-orange-400',
             ],
             variant === 'danger' && [
-              'bg-danger-400 text-white',
-              'shadow-d-100 hover:shadow-d-200 disabled:hover:shadow-d-100',
-              'hover:bg-danger-600 active:bg-danger-700',
-              'disabled:bg-danger-700 disabled:brightness-95',
-            ],
-            variant === 'ghost' && [
-              'bg-clear text-typo-secondary',
-              'hover:bg-secondary-200',
-              'active:bg-secondary-400 disabled:bg-secondary-400 disabled:brightness-95',
+              'bg-red text-base-surface',
+              'hover:bg-red-500 active:bg-red-600',
+              'disabled:bg-red-500 disabled:text-red-400',
             ],
           ],
-          //#endregion  //*======== Variants ===========
-          'disabled:cursor-not-allowed',
-          isLoading &&
-            'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
+          isLoading && ['relative disabled:cursor-wait !text-transparent'],
           className
         )}
         {...rest}
@@ -103,46 +111,48 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className={clsxm(
               'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
               [
-                ['primary', 'danger'].includes(variant) && 'text-white',
-                ['outline', 'ghost'].includes(variant) && 'text-gray-500',
+                variant === 'primary' && 'text-base-surface',
+                variant === 'secondary' && 'text-teal',
+                variant === 'warning' && 'text-base-surface',
+                variant === 'danger' && 'text-base-surface',
               ]
             )}
           >
             <ImSpinner2 className='animate-spin' />
           </div>
         )}
-        {/* Left Icon */}
-        {LeftIcon && (
-          <div className='mr-1'>
-            <LeftIcon
-              className={clsxm(
-                [
-                  size === 'base' && 'text-lg md:text-xl',
-                  size === 'sm' && 'text-sm md:text-lg',
-                ],
-                leftIconClassName
-              )}
-            />
-          </div>
+
+        {Icon && (
+          <Icon
+            className={clsxm('font-bold text-2xl leading-none', iconClassName)}
+          />
         )}
-        {children}
-        {RightIcon && (
-          <div className='ml-1'>
-            <RightIcon
-              className={clsxm(
-                [
-                  size === 'base' && 'text-lg md:text-xl',
-                  size === 'sm' && 'text-sm md:text-lg',
-                ],
-                [
-                  variant === 'primary' && 'text-primary-100',
-                  variant === 'danger' && 'text-danger-100',
-                  ['outline', 'ghost'].includes(variant) && 'text-typo-icons',
-                ],
-                rightIconClassName
-              )}
-            />
-          </div>
+
+        {!Icon && LeftIcon && (
+          <LeftIcon
+            className={clsxm(
+              'font-bold text-2xl leading-none',
+              leftIconClassName
+            )}
+          />
+        )}
+
+        {!Icon && (
+          <Typography
+            variant='c'
+            className={clsxm('font-bold leading-none', textClassName)}
+          >
+            {children}
+          </Typography>
+        )}
+
+        {!Icon && RightIcon && (
+          <RightIcon
+            className={clsxm(
+              'font-bold text-2xl leading-none',
+              rightIconClassName
+            )}
+          />
         )}
       </button>
     );
