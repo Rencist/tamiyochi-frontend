@@ -1,8 +1,9 @@
-import 'react-image-lightbox/style.css';
+import 'yet-another-react-lightbox/style.css';
 
 import Image from 'next/legacy/image';
 import * as React from 'react';
-import Lightbox from 'react-image-lightbox';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
 import api from '@/lib/api';
 
@@ -24,6 +25,8 @@ const ImageFetch = ({
 }: ImageFetchProps) => {
   const [imgSrc, setImgSrc] = React.useState<string>();
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const zoomRef = React.useRef(null);
 
   const getImageURL = React.useCallback(async ({ url }: { url: string }) => {
     api
@@ -73,8 +76,15 @@ const ImageFetch = ({
         )}
         {isOpen && (
           <Lightbox
-            mainSrc={imgSrc as string}
-            onCloseRequest={() => setIsOpen(false)}
+            open={isOpen}
+            slides={[{ src: imgSrc as string }]}
+            render={{
+              buttonPrev: () => null,
+              buttonNext: () => null,
+            }}
+            plugins={[Zoom]}
+            zoom={{ ref: zoomRef }}
+            close={() => setIsOpen(false)}
           />
         )}
       </div>
