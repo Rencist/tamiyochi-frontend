@@ -13,7 +13,15 @@ enum TypographyVariant {
   'c',
 }
 
-enum FontVarinat {
+enum FontWeight {
+  'light',
+  'regular',
+  'semibold',
+  'bold',
+  'extrabold',
+}
+
+enum FontVariant {
   'montserrat',
   'open-sans',
 }
@@ -22,7 +30,8 @@ type TypographyProps<T extends React.ElementType> = {
   /** @default <p> tag */
   as?: T;
   className?: string;
-  font?: keyof typeof FontVarinat;
+  font?: keyof typeof FontVariant;
+  weight?: keyof typeof FontWeight;
   variant?: keyof typeof TypographyVariant;
   children: React.ReactNode;
 };
@@ -32,6 +41,7 @@ export default function Typography<T extends React.ElementType>({
   children,
   className,
   font = 'open-sans',
+  weight = 'regular',
   variant = 'p',
   ...rest
 }: TypographyProps<T> &
@@ -71,6 +81,13 @@ export default function Typography<T extends React.ElementType>({
         [
           font === 'montserrat' && ['font-primary'],
           font === 'open-sans' && ['font-secondary'],
+        ],
+        [
+          weight === 'light' && ['font-light'],
+          weight === 'regular' && ['font-regular'],
+          weight === 'semibold' && ['font-semibold'],
+          weight === 'bold' && ['font-bold'],
+          weight === 'extrabold' && ['font-extrabold'],
         ],
         className
       )}
