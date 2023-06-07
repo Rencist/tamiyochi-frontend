@@ -1,3 +1,6 @@
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import Button from '@/components/buttons/Button';
@@ -9,16 +12,55 @@ import SEO from '@/components/SEO';
 import Typography from '@/components/typography/Typography';
 import { REG_EMAIL, REG_PHONE } from '@/constant/regex';
 import Layout from '@/layouts/Layout';
+import api from '@/lib/api';
 import AuthIllustration from '@/pages/auth/container/AuthIllustration';
+import { ApiReturn } from '@/types/api';
 import { SignUp } from '@/types/entity/auth';
 
 export default function SignUpPage() {
   const methods = useForm<SignUp>();
   const { handleSubmit } = methods;
 
-  const onSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('mabar');
+  const router = useRouter();
+
+  const [kabupaten, setKabupaten] = useState<
+    { id: string; nama: string }[] | undefined
+  >(undefined);
+
+  const { data: provinsi } = useQuery<
+    ApiReturn<{ id: string; nama: string }[]>
+  >(['/provinsi']);
+
+  const getKabupaten = (provinsiId: string) => {
+    api
+      .get<ApiReturn<{ id: string; nama: string }[]>>(
+        `/kabupaten?provinsi_id=${provinsiId}`
+      )
+      .then((res) => {
+        setKabupaten(res.data.data);
+      });
+  };
+
+  const { mutate: handleSignUp, isLoading } = useMutation(
+    async (data: SignUp) => {
+      const res = await api.post('/user', data);
+      return res;
+    }
+  );
+  const onSubmit = (data: SignUp) => {
+    handleSignUp(
+      {
+        nama: data.nama,
+        email: data.email,
+        no_telp: data.no_telp,
+        alamat: data.alamat,
+        kabupaten_id: data.kabupaten_id,
+        password: data.password,
+      },
+      {
+        onSuccess: () => router.push('/login'),
+      }
+    );
   };
 
   return (
@@ -95,20 +137,35 @@ export default function SignUpPage() {
                   validation={{ required: 'Alamat harus diisi' }}
                 />
                 <SelectInput
-                  id='provinsi'
+                  id='provinsi_id'
                   label='Provinsi'
                   placeholder='Pilih Provinsi'
                   validation={{ required: 'Provinsi harus diisi' }}
-                />
+                  onChange={(e) => getKabupaten(e.target.value)}
+                >
+                  {provinsi?.data.map((prov) => (
+                    <option key={prov.id} value={prov.id}>
+                      {prov.nama}
+                    </option>
+                  ))}
+                </SelectInput>
                 <SelectInput
                   id='kabupaten_id'
                   label='Kabupaten'
                   placeholder='Pilih Kabupaten'
                   validation={{ required: 'Kabupaten harus diisi' }}
                 >
-                  <option value='' disabled>
-                    --- Pilih Kabupaten ---
-                  </option>
+                  {kabupaten ? (
+                    kabupaten.map((kab) => (
+                      <option key={kab.id} value={kab.id}>
+                        {kab.nama}
+                      </option>
+                    ))
+                  ) : (
+                    <option value='69' disabled>
+                      --- Pilih Kabupaten ---
+                    </option>
+                  )}
                 </SelectInput>
               </div>
 
@@ -117,6 +174,7 @@ export default function SignUpPage() {
                   type='submit'
                   className='w-full'
                   textClassName='font-secondary'
+                  isLoading={isLoading}
                 >
                   Sign Up
                 </Button>
