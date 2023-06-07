@@ -91,11 +91,11 @@ export default function Input({
             readOnly={readOnly}
             disabled={readOnly}
             className={clsxm(
-              'w-full h-full px-3 py-2.5 rounded-md',
+              'w-full h-9 px-3 py-1.5 rounded-md',
               [LeftIcon && 'pl-9', RightIcon && 'pr-9'],
               [prefix && 'rounded-l-none', suffix && 'rounded-r-none'],
               'border-none focus:ring-1 focus:ring-inset',
-              'bg-base-light font-secondary text-base-primary',
+              'bg-base-light font-secondary text-base-primary text-sm',
               'placeholder:font-secondary placeholder:text-base-icon',
               readOnly && 'cursor-default',
               error

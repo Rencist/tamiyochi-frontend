@@ -10,20 +10,18 @@ export type ApiReturn<T> = {
   data: T;
 };
 
-export type ApiError = {
-  code: number;
-  status: string;
-  message: string;
+type PaginateData<T> = {
+  data_per_page: T;
+  meta: {
+    page: number;
+    per_page: number;
+    max_page: number;
+    total_data: number;
+  };
 };
 
-export interface PaginatedApiResponse<DataType, metaType> {
+export type PaginatedApiResponse<T> = {
   code: number;
-  status: string;
-  data: DataType;
-  meta:
-    | ({
-        last_page: number;
-        total: number;
-      } & metaType)
-    | null;
-}
+  success: string;
+  data: PaginateData<T>;
+};
