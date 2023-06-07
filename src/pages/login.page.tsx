@@ -1,3 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import Button from '@/components/buttons/Button';
@@ -6,15 +8,40 @@ import UnstyledLink from '@/components/links/UnstyledLink';
 import SEO from '@/components/SEO';
 import Typography from '@/components/typography/Typography';
 import Layout from '@/layouts/Layout';
+import api from '@/lib/api';
+import { setToken } from '@/lib/cookies';
 import AuthIllustration from '@/pages/auth/container/AuthIllustration';
+import useAuthStore from '@/store/useAuthStore';
+import { ApiReturn } from '@/types/api';
+import { User } from '@/types/entity/user';
 
 export default function LoginPage() {
   const methods = useForm<{ email: string; password: string }>();
   const { handleSubmit } = methods;
 
-  const onSubmit = () => {
-    // eslint-disable-next-line no-console
-    console.log('mabar');
+  const router = useRouter();
+  const login = useAuthStore.useLogin();
+
+  const { mutate: handleLogin, isLoading } = useMutation(
+    async (data: { email: string; password: string }) => {
+      const res = await api.post('/user/login', data);
+      const { token } = res.data.data;
+      setToken(token);
+
+      const user = await api.get<ApiReturn<User>>('/user/me');
+
+      if (!user.data.data) {
+        throw new Error('Sesi login tidak valid');
+      }
+      login({ ...user.data.data, token });
+    }
+  );
+
+  const onSubmit = (data: { email: string; password: string }) => {
+    handleLogin(
+      { email: data.email, password: data.password },
+      { onSuccess: () => router.push('/') }
+    );
   };
 
   return (
@@ -73,6 +100,7 @@ export default function LoginPage() {
                   type='submit'
                   className='w-full'
                   textClassName='font-secondary'
+                  isLoading={isLoading}
                 >
                   Log In
                 </Button>

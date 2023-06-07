@@ -60,9 +60,9 @@ export default function Input({
         </label>
       )}
 
-      <div className='w-full flex'>
+      <div className='w-full flex h-9'>
         {prefix && (
-          <Typography className='px-3 py-2.5 bg-base-outline text-base-secondary rounded-l-md'>
+          <Typography className='px-3 flex items-center bg-base-outline text-base-secondary rounded-l-md text-sm'>
             {prefix}
           </Typography>
         )}
@@ -91,7 +91,7 @@ export default function Input({
             readOnly={readOnly}
             disabled={readOnly}
             className={clsxm(
-              'w-full h-9 px-3 py-1.5 rounded-md',
+              'w-full h-full px-3 py-1.5 rounded-md',
               [LeftIcon && 'pl-9', RightIcon && 'pr-9'],
               [prefix && 'rounded-l-none', suffix && 'rounded-r-none'],
               'border-none focus:ring-1 focus:ring-inset',
@@ -136,7 +136,7 @@ export default function Input({
         </div>
 
         {suffix && (
-          <Typography className='px-3 py-2.5 bg-base-outline text-base-secondary rounded-r-md'>
+          <Typography className='px-3 flex items-center bg-base-outline text-base-secondary rounded-r-md text-sm'>
             {suffix}
           </Typography>
         )}
