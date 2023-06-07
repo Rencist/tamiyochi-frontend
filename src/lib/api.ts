@@ -7,15 +7,8 @@ import { getToken } from '@/lib/cookies';
 import { UninterceptedApiError } from '@/types/api';
 const context = <GetServerSidePropsContext>{};
 
-const baseURL =
-  process.env.NEXT_PUBLIC_RUN_MODE === 'local'
-    ? process.env.NEXT_PUBLIC_BACKEND_URL_LOCAL
-    : process.env.NEXT_PUBLIC_RUN_MODE === 'vercel'
-    ? process.env.NEXT_PUBLIC_BACKEND_URL_VERCEL
-    : process.env.NEXT_PUBLIC_BACKEND_URL;
-
 export const api = axios.create({
-  baseURL,
+  baseURL: 'http://159.65.3.173/api',
   headers: {
     'Content-Type': 'application/json',
   },

@@ -57,9 +57,9 @@ export default function SelectInput({
         defaultValue={defaultValue}
         disabled={readOnly}
         className={clsxm(
-          'w-full pl-3 pr-8 py-2.5 rounded-md truncate',
+          'w-full h-9 pl-3 pr-8 py-1.5 rounded-md truncate appearance-none',
           'border-none focus:ring-1 focus:ring-inset',
-          'bg-base-light font-secondary text-base-primary',
+          'bg-base-light font-secondary text-base-primary text-sm',
           'cursor-pointer',
           readOnly && 'cursor-default',
           error
