@@ -21,9 +21,11 @@ export default function DashboardPage() {
       keepPreviousData: true,
     }
   );
+
   const onChange = () => {
     return;
   };
+
   return (
     <Layout withNavbar={true}>
       <SEO />
@@ -53,9 +55,10 @@ export default function DashboardPage() {
               queryData.data.data_per_page.map((seri, index) => (
                 <Card
                   key={index}
+                  id={seri.id}
                   name={seri.judul}
-                  author={seri.penulis}
-                  rating={seri.skor}
+                  author={seri.penulis[0]}
+                  score={seri.skor}
                   imageSrc={seri.foto}
                   readers={seri.total_pembaca}
                   volumes={seri.manga.length.toString()}
