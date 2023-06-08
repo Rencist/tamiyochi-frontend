@@ -8,7 +8,7 @@ import { UninterceptedApiError } from '@/types/api';
 const context = <GetServerSidePropsContext>{};
 
 export const api = axios.create({
-  baseURL: 'http://159.65.3.173/api',
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL_PROD,
   headers: {
     'Content-Type': 'application/json',
   },
