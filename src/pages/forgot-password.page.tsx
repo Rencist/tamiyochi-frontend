@@ -25,6 +25,7 @@ export default function ForgotPasswordPage() {
             <AuthIllustration />
           </div>
         </section>
+
         <section className='flex items-center justify-center w-full md:w-1/3 md:min-w-[400px]  px-8 py-12'>
           <FormProvider {...methods}>
             <form
@@ -57,13 +58,14 @@ export default function ForgotPasswordPage() {
                 >
                   Kirim Email Reset Password
                 </Button>
-                <div className='flex'>
+
+                <div className='flex gap-1'>
                   <Typography
                     font='open-sans'
                     variant='c'
                     className='text-teal-600'
                   >
-                    Ingat kata sandi Anda?&nbsp;
+                    Ingat kata sandi Anda?
                   </Typography>
                   <UnstyledLink
                     href='/login'

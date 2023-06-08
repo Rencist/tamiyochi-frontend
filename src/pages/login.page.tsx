@@ -13,17 +13,19 @@ import { setToken } from '@/lib/cookies';
 import AuthIllustration from '@/pages/auth/container/AuthIllustration';
 import useAuthStore from '@/store/useAuthStore';
 import { ApiReturn } from '@/types/api';
+import { LogIn } from '@/types/entity/auth';
 import { User } from '@/types/entity/user';
 
 export default function LoginPage() {
-  const methods = useForm<{ email: string; password: string }>();
+  const router = useRouter();
+
+  const methods = useForm<LogIn>();
   const { handleSubmit } = methods;
 
-  const router = useRouter();
   const login = useAuthStore.useLogin();
 
   const { mutate: handleLogin, isLoading } = useMutation(
-    async (data: { email: string; password: string }) => {
+    async (data: LogIn) => {
       const res = await api.post('/user/login', data);
       const { token } = res.data.data;
       setToken(token);
@@ -37,16 +39,14 @@ export default function LoginPage() {
     }
   );
 
-  const onSubmit = (data: { email: string; password: string }) => {
-    handleLogin(
-      { email: data.email, password: data.password },
-      { onSuccess: () => router.push('/') }
-    );
+  const onSubmit = (data: LogIn) => {
+    handleLogin(data, { onSuccess: () => router.push('/') });
   };
 
   return (
     <Layout>
       <SEO title='Login' description='Login Page' />
+
       <main className='flex min-h-screen w-full bg-base-surface'>
         <section className='hidden md:flex fixed w-full h-screen p-3 pointer-events-none'>
           <div className='w-1/3 min-w-[400px] h-full' />
@@ -54,6 +54,7 @@ export default function LoginPage() {
             <AuthIllustration />
           </div>
         </section>
+
         <section className='flex items-center justify-center w-full md:w-1/3 md:min-w-[400px] px-8 py-12'>
           <FormProvider {...methods}>
             <form
@@ -76,6 +77,7 @@ export default function LoginPage() {
                   placeholder='Masukkan Email'
                   validation={{ required: 'Email harus diisi' }}
                 />
+
                 <div className='flex flex-col gap-1.5'>
                   <Input
                     id='password'
@@ -85,7 +87,7 @@ export default function LoginPage() {
                     validation={{ required: 'Password harus diisi' }}
                   />
                   <UnstyledLink
-                    href='/auth/forgot-password'
+                    href='/forgot-password'
                     className='self-end underline text-teal-400 hover:text-teal-600'
                   >
                     <Typography font='open-sans' variant='c' weight='semibold'>
@@ -104,13 +106,14 @@ export default function LoginPage() {
                 >
                   Log In
                 </Button>
-                <div className='flex'>
+
+                <div className='flex gap-1'>
                   <Typography
                     font='open-sans'
                     variant='c'
                     className='text-teal-600'
                   >
-                    Belum punya akun?&nbsp;
+                    Belum punya akun
                   </Typography>
                   <UnstyledLink
                     href='/signup'

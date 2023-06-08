@@ -16,45 +16,39 @@ import api from '@/lib/api';
 import AuthIllustration from '@/pages/auth/container/AuthIllustration';
 import { ApiReturn } from '@/types/api';
 import { SignUp } from '@/types/entity/auth';
+import { Pair } from '@/types/pair';
 
 export default function SignUpPage() {
-  const methods = useForm<SignUp>();
-  const { handleSubmit } = methods;
-
   const router = useRouter();
 
-  const [kabupaten, setKabupaten] = useState<
-    { id: string; nama: string }[] | undefined
-  >(undefined);
+  const methods = useForm<SignUp<string>>();
+  const { handleSubmit } = methods;
 
-  const { data: provinsi } = useQuery<
-    ApiReturn<{ id: string; nama: string }[]>
-  >(['/provinsi']);
+  const [kabupaten, setKabupaten] = useState<Pair[] | undefined>(undefined);
+
+  const { data: provinsi } = useQuery<ApiReturn<Pair[]>>(['/provinsi']);
 
   const getKabupaten = (provinsiId: string) => {
-    api
-      .get<ApiReturn<{ id: string; nama: string }[]>>(
-        `/kabupaten?provinsi_id=${provinsiId}`
-      )
-      .then((res) => {
-        setKabupaten(res.data.data);
-      });
+    api.get<ApiReturn<Pair[]>>(`/kabupaten/${provinsiId}`).then((res) => {
+      setKabupaten(res.data.data);
+    });
   };
 
   const { mutate: handleSignUp, isLoading } = useMutation(
-    async (data: SignUp) => {
+    async (data: SignUp<number>) => {
       const res = await api.post('/user', data);
       return res;
     }
   );
-  const onSubmit = (data: SignUp) => {
+
+  const onSubmit = (data: SignUp<string>) => {
     handleSignUp(
       {
         nama: data.nama,
         email: data.email,
         no_telp: data.no_telp,
         alamat: data.alamat,
-        kabupaten_id: data.kabupaten_id,
+        kabupaten_id: parseInt(data.kabupaten_id),
         password: data.password,
       },
       {
@@ -66,6 +60,7 @@ export default function SignUpPage() {
   return (
     <Layout>
       <SEO title='Sign Up' description='Sign Up Page' />
+
       <main className='flex min-h-screen w-full bg-base-surface'>
         <section className='hidden md:flex fixed w-full h-screen p-3 pointer-events-none'>
           <div className='w-1/3 min-w-[400px] h-full' />
@@ -73,6 +68,7 @@ export default function SignUpPage() {
             <AuthIllustration />
           </div>
         </section>
+
         <section className='flex items-center justify-center w-full md:w-1/3 md:min-w-[400px] px-8 py-12'>
           <FormProvider {...methods}>
             <form
@@ -136,6 +132,7 @@ export default function SignUpPage() {
                   placeholder='Masukkan Alamat'
                   validation={{ required: 'Alamat harus diisi' }}
                 />
+
                 <SelectInput
                   id='provinsi_id'
                   label='Provinsi'
@@ -149,6 +146,7 @@ export default function SignUpPage() {
                     </option>
                   ))}
                 </SelectInput>
+
                 <SelectInput
                   id='kabupaten_id'
                   label='Kabupaten'
@@ -162,7 +160,7 @@ export default function SignUpPage() {
                       </option>
                     ))
                   ) : (
-                    <option value='69' disabled>
+                    <option value='' disabled>
                       --- Pilih Kabupaten ---
                     </option>
                   )}
@@ -178,13 +176,14 @@ export default function SignUpPage() {
                 >
                   Sign Up
                 </Button>
-                <div className='flex'>
+
+                <div className='flex gap-1'>
                   <Typography
                     font='open-sans'
                     variant='c'
                     className='text-teal-600'
                   >
-                    Sudah punya akun?&nbsp;
+                    Sudah punya akun?
                   </Typography>
                   <UnstyledLink
                     href='/login'
