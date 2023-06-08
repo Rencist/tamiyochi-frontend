@@ -77,12 +77,14 @@ export default function TextArea({
           {...rest}
         />
 
-        <Typography
-          variant='c'
-          className='absolute right-3 bottom-2.5 text-base-icon'
-        >
-          {value.length}/{maxLength}
-        </Typography>
+        {!readOnly && (
+          <Typography
+            variant='c'
+            className='absolute right-3 bottom-2.5 text-base-icon'
+          >
+            {value.length}/{maxLength}
+          </Typography>
+        )}
       </div>
 
       {!hideError && error && <ErrorMessage>{error.message}</ErrorMessage>}

@@ -4,27 +4,18 @@ export type Manga = {
   jumlah_tersedia: number;
   harga_sewa: number;
   seri_id: number;
-  created_at: string;
-  updated_at: string;
-  DeletedAt: null | string;
 };
 
 export type Penulis = {
   id: number;
   nama_depan: string;
-  nama_belakangang: string;
+  nama_belakang: string;
   peran: string;
-  created_at: string;
-  updated_at: string;
-  DeletedAt: null | string;
 };
 
 export type Genre = {
   id: number;
   nama: string;
-  created_at: string;
-  updated_at: string;
-  DeletedAt: null | string;
 };
 
 export type Seri = {
@@ -32,12 +23,21 @@ export type Seri = {
   judul: string;
   sinopsis: string;
   tahun_terbit: string;
-  skor: string;
-  total_penilai: string;
-  total_pembaca: string;
+  skor: number;
+  total_penilai: number;
+  total_pembaca: number;
   foto: string;
   penerbit_id: number;
+  nama_penerbit: string;
   manga: Manga[];
   penulis: Penulis[];
   genre: Genre[];
+};
+
+export type Comment = {
+  id: string;
+  isi: string;
+  username: string;
+  created_at: string;
+  user_id: string;
 };
