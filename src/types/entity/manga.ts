@@ -31,7 +31,7 @@ export type Seri = {
   nama_penerbit: string;
   manga: Manga[];
   penulis: Penulis[];
-  genre: Genre[];
+  genre?: Genre[];
 };
 
 export type Comment = {

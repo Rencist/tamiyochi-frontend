@@ -1,5 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import Button from '@/components/buttons/Button';
@@ -12,11 +14,12 @@ import api from '@/lib/api';
 import { setToken } from '@/lib/cookies';
 import AuthIllustration from '@/pages/auth/container/AuthIllustration';
 import useAuthStore from '@/store/useAuthStore';
-import { ApiReturn } from '@/types/api';
+import { ApiError, ApiReturn } from '@/types/api';
 import { LogIn } from '@/types/entity/auth';
 import { User } from '@/types/entity/user';
 
 export default function LoginPage() {
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const methods = useForm<LogIn>();
@@ -24,9 +27,14 @@ export default function LoginPage() {
 
   const login = useAuthStore.useLogin();
 
-  const { mutate: handleLogin, isLoading } = useMutation(
-    async (data: LogIn) => {
+  const { mutate: handleLogin, isLoading } = useMutation<
+    AxiosResponse<ApiReturn<LogIn>> | void,
+    AxiosError<ApiError>,
+    LogIn
+  >({
+    mutationFn: async (data) => {
       const res = await api.post('/user/login', data);
+
       const { token } = res.data.data;
       setToken(token);
 
@@ -36,11 +44,16 @@ export default function LoginPage() {
         throw new Error('Sesi login tidak valid');
       }
       login({ ...user.data.data, token });
-    }
-  );
+    },
+  });
 
   const onSubmit = (data: LogIn) => {
-    handleLogin(data, { onSuccess: () => router.push('/') });
+    handleLogin(data, {
+      onSuccess: () => router.push('/'),
+      onError: (err) => {
+        err.response && setError(err.response?.data.errors);
+      },
+    });
   };
 
   return (
@@ -96,8 +109,16 @@ export default function LoginPage() {
                   </UnstyledLink>
                 </div>
               </div>
-
               <div className='flex flex-col items-center gap-1.5'>
+                {error && (
+                  <Button
+                    size='small'
+                    variant='danger'
+                    className='pointer-events-none w-full bg-opacity-80'
+                  >
+                    {error}
+                  </Button>
+                )}
                 <Button
                   type='submit'
                   className='w-full'

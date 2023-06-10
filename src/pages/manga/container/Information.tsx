@@ -15,7 +15,7 @@ type InformationProps = {
   date: Date;
   authors: Penulis[];
   publisher: string;
-  genres: Genre[];
+  genres?: Genre[];
 };
 
 export default function Information({
@@ -98,11 +98,21 @@ export default function Information({
           <Typography variant='c' weight='semibold' className='text-teal-600'>
             Genre
           </Typography>
-          {genres.map(({ nama }) => (
-            <Typography key={`${nama}`} variant='c' className='text-base-icon'>
-              {nama}
+          {genres ? (
+            genres.map(({ nama }) => (
+              <Typography
+                key={`${nama}`}
+                variant='c'
+                className='text-base-icon'
+              >
+                {nama}
+              </Typography>
+            ))
+          ) : (
+            <Typography variant='c' className='text-base-icon'>
+              Genre-less
             </Typography>
-          ))}
+          )}
         </div>
       </div>
     </div>

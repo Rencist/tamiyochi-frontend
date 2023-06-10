@@ -10,6 +10,12 @@ export type ApiReturn<T> = {
   data: T;
 };
 
+export type ApiError = {
+  errors: string;
+  message: string;
+  status: string;
+};
+
 type PaginateData<T> = {
   data_per_page: T;
   meta: {

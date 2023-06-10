@@ -4,8 +4,10 @@ import { BiSearch } from 'react-icons/bi';
 
 import Filter from '@/components/form/Filter';
 import Input from '@/components/form/Input';
+import PageNavigation from '@/components/PageNavigation';
 import SEO from '@/components/SEO';
 import { GENRE } from '@/constant/manga';
+import usePageNavigation from '@/hooks/usePageNavigation';
 import Layout from '@/layouts/Layout';
 import Card from '@/pages/dashboard/components/Card';
 import { PaginatedApiResponse } from '@/types/api';
@@ -14,13 +16,15 @@ import { Seri } from '@/types/entity/manga';
 export default function DashboardPage() {
   const methods = useForm();
   const { handleSubmit } = methods;
+  const { pageState, setPageState } = usePageNavigation({ pageSize: 60 });
 
-  const { data: queryData } = useQuery<PaginatedApiResponse<Seri[]>>(
-    ['seri?page=1&per_page=50'],
-    {
-      keepPreviousData: true,
-    }
-  );
+  const url = `seri?page=${pageState.pageIndex + 1}&per_page=${
+    pageState.pageSize
+  }`;
+
+  const { data: queryData } = useQuery<PaginatedApiResponse<Seri[]>>([url], {
+    keepPreviousData: true,
+  });
 
   const onChange = () => {
     return;
@@ -50,32 +54,34 @@ export default function DashboardPage() {
               </form>
             </FormProvider>
           </section>
-          <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-            {queryData &&
-              queryData.data.data_per_page.map((seri, index) => (
-                <Card
-                  key={index}
-                  id={seri.id}
-                  name={seri.judul}
-                  author={seri.penulis[0]}
-                  score={seri.skor}
-                  imageSrc={seri.foto}
-                  readers={seri.total_pembaca}
-                  volumes={seri.manga.length.toString()}
-                  year={seri.tahun_terbit.split('/')[2]}
-                  synopsis={seri.sinopsis}
-                  genre={seri.genre
-                    .map(({ nama }) => nama)
-                    .filter(
-                      (value, index, arr) => arr.indexOf(value) === index
-                    )}
-                />
-              ))}
+          <section className='flex flex-col gap-8 items-end'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+              {queryData &&
+                queryData.data.data_per_page.map((seri) => (
+                  <Card
+                    key={seri.id}
+                    id={seri.id}
+                    name={seri.judul}
+                    author={seri.penulis[0]}
+                    score={seri.skor}
+                    imageSrc={seri.foto}
+                    readers={seri.total_pembaca}
+                    volumes={seri.manga.length.toString()}
+                    year={seri.tahun_terbit.split('/')[2]}
+                    synopsis={seri.sinopsis}
+                    genre={seri.genre}
+                  />
+                ))}
+            </div>
+            {queryData && (
+              <PageNavigation
+                meta={queryData?.data.meta}
+                pageState={pageState}
+                pageCount={5}
+                setPageState={setPageState}
+              />
+            )}
           </section>
-          {/* 
-            TODO 
-            Page Navigation
-          */}
         </div>
       </main>
     </Layout>
