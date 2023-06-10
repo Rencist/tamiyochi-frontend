@@ -1,13 +1,13 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { AiFillStar } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { numericFormatter } from 'react-number-format';
 import { useDraggable } from 'react-use-draggable-scroll';
 
 import Typography from '@/components/typography/Typography';
-import { Penulis } from '@/types/entity/manga';
+import { Genre, Penulis } from '@/types/entity/manga';
 
 type CardProps = {
   id: number;
@@ -19,7 +19,7 @@ type CardProps = {
   volumes: string;
   year: string;
   synopsis: string;
-  genre: string[];
+  genre?: Genre[];
 };
 
 export default function Card({
@@ -34,22 +34,9 @@ export default function Card({
   synopsis,
   genre,
 }: CardProps) {
-  const [isImageValid, setImageValid] = useState<boolean>(false);
+  const [src, setSrc] = useState(imageSrc);
 
   const router = useRouter();
-
-  useEffect(() => {
-    const fetchImage = async () =>
-      await fetch(imageSrc)
-        .then((res) => {
-          if (res.ok) setImageValid(true);
-        })
-        .catch(() => {
-          return;
-        });
-
-    fetchImage();
-  }, [imageSrc, author]);
 
   const ref =
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
@@ -66,23 +53,14 @@ export default function Card({
         className='relative w-48 h-full cursor-pointer'
         onClick={handleClick}
       >
-        {isImageValid ? (
-          <Image
-            src={imageSrc}
-            alt='manga-cover'
-            width='416'
-            height='600'
-            className='h-full'
-          />
-        ) : (
-          <Image
-            src='/images/error.jpg'
-            alt='manga-cover'
-            width='700'
-            height='394'
-            className='h-full object-cover'
-          />
-        )}
+        <Image
+          src={src}
+          alt='manga-cover'
+          width='200'
+          height='300'
+          onError={() => setSrc('/images/error.jpg')}
+          className='w-full h-full object-cover'
+        />
         <div className='absolute w-full space-y-1 px-3 py-1.5 bottom-0 bg-teal-900 opacity-90'>
           <div className='-space-y-1 text-base-surface hover:text-teal-200'>
             <Typography variant='p' weight='bold'>
@@ -126,24 +104,39 @@ export default function Card({
         <div className='h-12 w-full' />
 
         <div
-          className='absolute bottom-0 w-full flex flex-row gap-2.5 p-3 bg-base-outline overflow-x-scroll scrollbar-hide'
+          className='absolute bottom-0 w-full h-12 flex flex-row gap-2.5 p-3 bg-base-outline overflow-x-scroll scrollbar-hide'
           {...events}
           ref={ref}
         >
-          {genre.map((genreName) => (
-            <div
-              key={genreName}
-              className='bg-teal-600 px-3 rounded-3xl whitespace-nowrap'
-            >
+          {genre ? (
+            genre
+              .map(({ nama }) => nama)
+              .filter((value, index, arr) => arr.indexOf(value) === index)
+              .map((genreName) => (
+                <div
+                  key={genreName}
+                  className='bg-teal-600 px-3 rounded-3xl whitespace-nowrap'
+                >
+                  <Typography
+                    variant='c'
+                    weight='bold'
+                    className='text-base-surface'
+                  >
+                    {genreName}
+                  </Typography>
+                </div>
+              ))
+          ) : (
+            <div className='bg-teal-600 px-3 rounded-3xl whitespace-nowrap'>
               <Typography
                 variant='c'
                 weight='bold'
                 className='text-base-surface'
               >
-                {genreName}
+                Genre-less
               </Typography>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

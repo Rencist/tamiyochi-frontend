@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -14,45 +15,51 @@ import { REG_EMAIL, REG_PHONE } from '@/constant/regex';
 import Layout from '@/layouts/Layout';
 import api from '@/lib/api';
 import AuthIllustration from '@/pages/auth/container/AuthIllustration';
-import { ApiReturn } from '@/types/api';
+import { ApiError, ApiReturn } from '@/types/api';
 import { SignUp } from '@/types/entity/auth';
-import { Pair } from '@/types/pair';
+import { Kabupaten, Provinsi } from '@/types/entity/daerah';
 
 export default function SignUpPage() {
+  const [error, setError] = useState('');
   const router = useRouter();
 
-  const methods = useForm<SignUp<string>>();
+  const methods = useForm<SignUp>();
   const { handleSubmit } = methods;
 
-  const [kabupaten, setKabupaten] = useState<Pair[] | undefined>(undefined);
+  const [kabupaten, setKabupaten] = useState<Kabupaten[]>([]);
 
-  const { data: provinsi } = useQuery<ApiReturn<Pair[]>>(['/provinsi']);
+  const { data: provinsi } = useQuery<ApiReturn<Provinsi[]>>(['/provinsi']);
 
   const getKabupaten = (provinsiId: string) => {
-    api.get<ApiReturn<Pair[]>>(`/kabupaten/${provinsiId}`).then((res) => {
+    api.get<ApiReturn<Kabupaten[]>>(`/kabupaten/${provinsiId}`).then((res) => {
       setKabupaten(res.data.data);
     });
   };
 
-  const { mutate: handleSignUp, isLoading } = useMutation(
-    async (data: SignUp<number>) => {
-      const res = await api.post('/user', data);
-      return res;
-    }
-  );
+  const { mutate: handleSignUp, isLoading } = useMutation<
+    AxiosResponse<ApiReturn<SignUp>> | void,
+    AxiosError<ApiError>,
+    SignUp
+  >(async (data: SignUp) => {
+    const res = await api.post('/user', data);
+    return res;
+  });
 
-  const onSubmit = (data: SignUp<string>) => {
+  const onSubmit = (data: SignUp) => {
     handleSignUp(
       {
         nama: data.nama,
         email: data.email,
         no_telp: data.no_telp,
         alamat: data.alamat,
-        kabupaten_id: parseInt(data.kabupaten_id),
+        kabupaten_id: parseInt(data.kabupaten_id.toString()),
         password: data.password,
       },
       {
         onSuccess: () => router.push('/login'),
+        onError: (err) => {
+          err.response && setError(err.response.data.errors);
+        },
       }
     );
   };
@@ -168,6 +175,15 @@ export default function SignUpPage() {
               </div>
 
               <div className='flex flex-col items-center gap-1.5'>
+                {error && (
+                  <Button
+                    size='small'
+                    variant='danger'
+                    className='pointer-events-none w-full bg-opacity-80'
+                  >
+                    {error}
+                  </Button>
+                )}
                 <Button
                   type='submit'
                   className='w-full'
