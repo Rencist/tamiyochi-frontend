@@ -17,7 +17,7 @@ export type ApiError = {
 };
 
 type PaginateData<T> = {
-  data_per_page: T;
+  data_per_page?: T;
   meta: {
     page: number;
     per_page: number;
