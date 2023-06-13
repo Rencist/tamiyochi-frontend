@@ -1,33 +1,50 @@
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { BiSearch } from 'react-icons/bi';
 
-import Filter from '@/components/form/Filter';
+import Filter, { FilterType } from '@/components/form/Filter';
 import Input from '@/components/form/Input';
 import PageNavigation from '@/components/PageNavigation';
 import SEO from '@/components/SEO';
-import { GENRE } from '@/constant/manga';
+import Typography from '@/components/typography/Typography';
+import { GENRE, SORT } from '@/constant/manga';
 import usePageNavigation from '@/hooks/usePageNavigation';
 import Layout from '@/layouts/Layout';
 import Card from '@/pages/dashboard/components/Card';
 import { PaginatedApiResponse } from '@/types/api';
 import { Seri } from '@/types/entity/manga';
 
+type DashboardFilter = {
+  search: string;
+  genre: FilterType[];
+  sort: FilterType[];
+};
+
 export default function DashboardPage() {
-  const methods = useForm();
+  const methods = useForm<DashboardFilter>();
   const { handleSubmit } = methods;
   const { pageState, setPageState } = usePageNavigation({ pageSize: 60 });
+  const [filters, setFilters] = useState<DashboardFilter | undefined>(
+    undefined
+  );
 
   const url = `seri?page=${pageState.pageIndex + 1}&per_page=${
     pageState.pageSize
-  }`;
+  }${filters?.search ? `&search=${filters?.search}` : ''}${
+    filters?.genre
+      ? filters.genre
+          .map((item, index) => `&filter[0][${index}]=${item.id}`)
+          .join('')
+      : ''
+  }${filters?.sort[0] ? `&sort=${filters?.sort[0].value}` : ''}`;
 
   const { data: queryData } = useQuery<PaginatedApiResponse<Seri[]>>([url], {
     keepPreviousData: true,
   });
 
-  const onChange = () => {
-    return;
+  const onChange = (filter: DashboardFilter) => {
+    setFilters(filter);
   };
 
   return (
@@ -44,20 +61,28 @@ export default function DashboardPage() {
               >
                 <Input id='search' placeholder='Search' leftIcon={BiSearch} />
                 <div className='flex flex-row gap-3 lg:col-start-3'>
-                  <Filter placeholder='Genre' filters={GENRE} multiple />
                   <Filter
+                    id='genre'
+                    placeholder='Genre'
+                    filters={GENRE}
+                    multiple
+                    onChange={handleSubmit(onChange)}
+                  />
+                  <Filter
+                    id='sort'
                     placeholder='Sort By'
-                    defaultValue='Title'
-                    filters={['Title', 'Rating', 'Popularity', 'Release Date']}
+                    defaultValue={[SORT[0]]}
+                    filters={SORT}
+                    onChange={handleSubmit(onChange)}
                   />
                 </div>
               </form>
             </FormProvider>
           </section>
           <section className='flex flex-col gap-8 items-end'>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-              {queryData &&
-                queryData.data.data_per_page.map((seri) => (
+            {queryData?.data.data_per_page ? (
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+                {queryData?.data.data_per_page?.map((seri) => (
                   <Card
                     key={seri.id}
                     id={seri.id}
@@ -72,7 +97,18 @@ export default function DashboardPage() {
                     genre={seri.genre}
                   />
                 ))}
-            </div>
+              </div>
+            ) : (
+              <div className='flex w-full justify-center'>
+                <Typography
+                  variant='h3'
+                  weight='semibold'
+                  className='text-teal-600'
+                >
+                  No Manga Found
+                </Typography>
+              </div>
+            )}
             {queryData && (
               <PageNavigation
                 meta={queryData?.data.meta}

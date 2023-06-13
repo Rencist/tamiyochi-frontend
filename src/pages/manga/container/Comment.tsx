@@ -48,7 +48,7 @@ export default function Comment({ mangaId }: { mangaId: string }) {
       </FormProvider>
 
       <div className='flex flex-col gap-6'>
-        {commentData?.data.data_per_page.map(
+        {commentData?.data.data_per_page?.map(
           ({ id, isi, username, created_at }) => (
             <CommentCard
               key={id}
