@@ -41,3 +41,22 @@ export type Comment = {
   created_at: string;
   user_id: string;
 };
+
+export type Rent = {
+  id_peminjaman_manga: string;
+  id_seri: number;
+  id_penulis: number;
+  id_manga: number;
+  id_denda: string;
+  id_peminjaman: string;
+  foto: string;
+  judul: string;
+  penulis: Penulis[];
+  volume: number;
+  tanggal_peminjaman: string;
+  batas_pengembalian: string;
+  status_peminjaman: string;
+  denda: number;
+  is_denda_lunas: boolean;
+  jumlah_sewa: number;
+};

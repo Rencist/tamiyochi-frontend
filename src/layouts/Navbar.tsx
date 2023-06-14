@@ -50,7 +50,7 @@ export default function Navbar() {
           </UnstyledLink>
 
           {user && isAuthenticated && (
-            <UnstyledLink href='/manga/579'>
+            <UnstyledLink href='/library'>
               <Typography
                 font='montserrat'
                 variant='h6'
