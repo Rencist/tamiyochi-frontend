@@ -1,22 +1,57 @@
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { LuMinus, LuPlus } from 'react-icons/lu';
 import { numericFormatter } from 'react-number-format';
 
 import Button from '@/components/buttons/Button';
 import Typography from '@/components/typography/Typography';
+import api from '@/lib/api';
+import { ApiError, ApiReturn } from '@/types/api';
+import { User } from '@/types/entity/user';
 
 type VolumeCardProps = {
+  user: User | null;
+  mangaId: number;
   volume: number;
   harga: number;
   tersedia: number;
+  onSubmit: () => void;
 };
 
 export default function VolumeCard({
+  user,
+  mangaId,
   volume,
   harga,
   tersedia,
+  onSubmit,
 }: VolumeCardProps) {
+  const router = useRouter();
+
   const [count, setCount] = useState(0);
+
+  const { mutateAsync: addCart } = useMutation<
+    AxiosResponse<ApiReturn<null>>,
+    AxiosError<ApiError>,
+    { manga_id: number }
+  >((data: { manga_id: number }) => api.post('cart', data));
+
+  const handleAddCart = async () => {
+    if (user)
+      for (let i = 0; i < count; i++)
+        await addCart(
+          { manga_id: mangaId },
+          {
+            onSuccess: () => {
+              onSubmit();
+              setCount(0);
+            },
+          }
+        );
+    else router.push('/login');
+  };
   return (
     <div
       key={volume}
@@ -90,7 +125,12 @@ export default function VolumeCard({
                 })}
               </Typography>
             </div>
-            <Button size='small' leftIconClassName='text-lg' leftIcon={LuPlus}>
+            <Button
+              size='small'
+              leftIconClassName='text-lg'
+              leftIcon={LuPlus}
+              onClick={handleAddCart}
+            >
               Pinjaman
             </Button>
           </div>

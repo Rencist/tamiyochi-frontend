@@ -11,7 +11,7 @@ import Typography from '@/components/typography/Typography';
 import { GENRE, SORT } from '@/constant/manga';
 import usePageNavigation from '@/hooks/usePageNavigation';
 import Layout from '@/layouts/Layout';
-import Card from '@/pages/dashboard/components/Card';
+import MangaCard from '@/pages/dashboard/components/MangaCard';
 import { PaginatedApiResponse } from '@/types/api';
 import { Seri } from '@/types/entity/manga';
 
@@ -53,7 +53,6 @@ export default function DashboardPage() {
       <main className='space-y-8 min-h-screen bg-base-surface pt-[92px]'>
         <div className='p-12 space-y-8'>
           <section className='w-full'>
-            {/* TODO */}
             <FormProvider {...methods}>
               <form
                 onChange={handleSubmit(onChange)}
@@ -83,7 +82,7 @@ export default function DashboardPage() {
             {queryData?.data.data_per_page ? (
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
                 {queryData?.data.data_per_page?.map((seri) => (
-                  <Card
+                  <MangaCard
                     key={seri.id}
                     id={seri.id}
                     name={seri.judul}

@@ -9,7 +9,7 @@ import { useDraggable } from 'react-use-draggable-scroll';
 import Typography from '@/components/typography/Typography';
 import { Genre, Penulis } from '@/types/entity/manga';
 
-type CardProps = {
+type MangaCardProps = {
   id: number;
   name: string;
   author: Penulis;
@@ -22,7 +22,7 @@ type CardProps = {
   genre?: Genre[];
 };
 
-export default function Card({
+export default function MangaCard({
   id,
   name,
   author,
@@ -33,7 +33,7 @@ export default function Card({
   year,
   synopsis,
   genre,
-}: CardProps) {
+}: MangaCardProps) {
   const [src, setSrc] = useState(imageSrc);
 
   const router = useRouter();
