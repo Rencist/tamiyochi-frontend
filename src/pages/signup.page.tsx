@@ -58,7 +58,7 @@ export default function SignUpPage() {
       {
         onSuccess: () => router.push('/login'),
         onError: (err) => {
-          err.response && setError(err.response.data.errors);
+          err.response && setError(err.response?.data.message);
         },
       }
     );
