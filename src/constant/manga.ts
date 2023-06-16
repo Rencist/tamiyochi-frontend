@@ -65,19 +65,19 @@ export const GENRE = [
   },
   {
     id: 17,
-    value: 'girls love',
+    value: 'g love',
   },
   {
     id: 18,
-    value: 'boys love',
+    value: 'b love',
   },
   {
     id: 19,
-    value: 'erotica',
+    value: 'ero',
   },
   {
     id: 20,
-    value: 'hentai',
+    value: 'henta',
   },
   {
     id: 21,
