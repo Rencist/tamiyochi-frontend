@@ -5,6 +5,7 @@ import { BiSearch } from 'react-icons/bi';
 
 import Filter, { FilterType } from '@/components/form/Filter';
 import Input from '@/components/form/Input';
+import withAuth from '@/components/hoc/withAuth';
 import PageNavigation from '@/components/PageNavigation';
 import SEO from '@/components/SEO';
 import Typography from '@/components/typography/Typography';
@@ -21,7 +22,9 @@ type DashboardFilter = {
   sort: FilterType[];
 };
 
-export default function DashboardPage() {
+export default withAuth(DashboardPage, ['all']);
+
+function DashboardPage() {
   const methods = useForm<DashboardFilter>();
   const { handleSubmit } = methods;
   const { pageState, setPageState } = usePageNavigation({ pageSize: 60 });

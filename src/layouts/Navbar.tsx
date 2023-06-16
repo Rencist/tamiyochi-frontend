@@ -13,6 +13,7 @@ import useAuthStore from '@/store/useAuthStore';
 export default function Navbar() {
   const logout = useAuthStore.useLogout();
   const user = useAuthStore.useUser();
+  const isAuthenticated = useAuthStore.useIsAuthenticated();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -48,7 +49,7 @@ export default function Navbar() {
             </Typography>
           </UnstyledLink>
 
-          {user && (
+          {user && isAuthenticated && (
             <UnstyledLink href='/manga/579'>
               <Typography
                 font='montserrat'
@@ -62,7 +63,7 @@ export default function Navbar() {
           )}
         </div>
 
-        {user ? (
+        {user && isAuthenticated ? (
           <div className='flex flex-row gap-8 items-center'>
             <ButtonLink
               href='/cart'

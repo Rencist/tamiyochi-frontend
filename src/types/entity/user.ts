@@ -1,3 +1,5 @@
+import { PermissionList } from '@/types/entity/permission-list';
+
 export type User = {
   id: string;
   nama: string;
@@ -5,7 +7,7 @@ export type User = {
   no_telp: string;
   password: string;
   alamat: string;
-  peran: string;
+  peran: PermissionList;
   kabupaten_id: number;
   token: string;
 };
