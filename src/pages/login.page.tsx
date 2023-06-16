@@ -91,23 +91,13 @@ export default function LoginPage() {
                   validation={{ required: 'Email harus diisi' }}
                 />
 
-                <div className='flex flex-col gap-1.5'>
-                  <Input
-                    id='password'
-                    type='password'
-                    label='Password'
-                    placeholder='Masukkan Password'
-                    validation={{ required: 'Password harus diisi' }}
-                  />
-                  <UnstyledLink
-                    href='/forgot-password'
-                    className='self-end underline text-teal-400 hover:text-teal-600'
-                  >
-                    <Typography font='open-sans' variant='c' weight='semibold'>
-                      Lupa kata sandi?
-                    </Typography>
-                  </UnstyledLink>
-                </div>
+                <Input
+                  id='password'
+                  type='password'
+                  label='Password'
+                  placeholder='Masukkan Password'
+                  validation={{ required: 'Password harus diisi' }}
+                />
               </div>
               <div className='flex flex-col items-center gap-1.5'>
                 {error && (

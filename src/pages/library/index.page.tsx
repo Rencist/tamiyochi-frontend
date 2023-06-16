@@ -15,7 +15,7 @@ function LibraryPage() {
 
   return (
     <Layout withNavbar={true}>
-      <SEO />
+      <SEO title='Manga Terpinjam' />
       <main className='min-h-screen bg-base-surface pt-[92px]'>
         <div className='p-12'>
           <section className='flex flex-col gap-8'>
@@ -25,6 +25,7 @@ function LibraryPage() {
                   <LibraryCard
                     key={rent.id_peminjaman_manga}
                     id={rent.id_peminjaman}
+                    mangaId={rent.id_seri}
                     name={rent.judul}
                     author={rent.penulis[0]}
                     imageSrc={rent.foto}

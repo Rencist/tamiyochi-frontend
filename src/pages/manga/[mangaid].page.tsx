@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import withAuth from '@/components/hoc/withAuth';
+import SEO from '@/components/SEO';
 import Typography from '@/components/typography/Typography';
 import Layout from '@/layouts/Layout';
 import Comment from '@/pages/manga/container/Comment';
@@ -27,6 +28,7 @@ function DetailManga() {
 
   return (
     <Layout withNavbar={true}>
+      {mangaData?.data.judul && <SEO title={mangaData.data.judul} />}
       <main className='min-h-screen'>
         <div className='relative h-[300px] w-full -z-50'>
           <Image

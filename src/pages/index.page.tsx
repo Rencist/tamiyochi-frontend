@@ -52,7 +52,7 @@ function DashboardPage() {
 
   return (
     <Layout withNavbar={true}>
-      <SEO />
+      <SEO title='Koleksi Manga' />
       <main className='space-y-8 min-h-screen bg-base-surface pt-[92px]'>
         <div className='p-12 space-y-8'>
           <section className='w-full'>

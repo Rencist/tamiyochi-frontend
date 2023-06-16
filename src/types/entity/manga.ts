@@ -59,7 +59,8 @@ export type Rent = {
     | 'Menunggu Konfirmasi'
     | 'Belum Diambil'
     | 'Sedang Dipinjam'
-    | 'Sudah Dikembalikan';
+    | 'Sudah Dikembalikan'
+    | 'Sudah Membayar Denda';
   denda: number;
   is_denda_lunas: boolean;
   jumlah_sewa: number;
