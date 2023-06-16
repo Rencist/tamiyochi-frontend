@@ -6,6 +6,7 @@ import { numericFormatter } from 'react-number-format';
 
 import Button from '@/components/buttons/Button';
 import Input from '@/components/form/Input';
+import withAuth from '@/components/hoc/withAuth';
 import SEO from '@/components/SEO';
 import Typography from '@/components/typography/Typography';
 import { REG_URL } from '@/constant/regex';
@@ -15,7 +16,9 @@ import CartCard from '@/pages/dashboard/components/CartCard';
 import { ApiError, ApiReturn } from '@/types/api';
 import { Cart, CartPayment } from '@/types/entity/cart';
 
-export default function CartPage() {
+export default withAuth(CartPage, ['user']);
+
+function CartPage() {
   const [isFormVisible, setIsFormVisible] = React.useState<boolean>(false);
 
   const methods = useForm<CartPayment>({
