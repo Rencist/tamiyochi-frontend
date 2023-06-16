@@ -55,7 +55,11 @@ export type Rent = {
   volume: number;
   tanggal_peminjaman: string;
   batas_pengembalian: string;
-  status_peminjaman: string;
+  status_peminjaman:
+    | 'Menunggu Konfirmasi'
+    | 'Belum Diambil'
+    | 'Sedang Dipinjam'
+    | 'Sudah Dikembalikan';
   denda: number;
   is_denda_lunas: boolean;
   jumlah_sewa: number;
