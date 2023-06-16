@@ -104,42 +104,50 @@ function CartPage() {
             </div>
 
             <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
-                {isFormVisible && (
-                  <div className='w-full p-4 space-y-6 rounded-lg bg-base-surface'>
-                    <Input
-                      id='atas_nama'
-                      label='Atas Nama'
-                      placeholder='Masukkan Nama Rekening Pembayar'
-                      validation={{
-                        required: 'Nama rekening pembayar tidak boleh kosong',
-                      }}
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {isFormVisible ? (
+                  <div className='w-full space-y-6'>
+                    <div className='p-4 space-y-6 rounded-lg bg-base-surface'>
+                      <Input
+                        id='atas_nama'
+                        label='Atas Nama'
+                        placeholder='Masukkan Nama Rekening Pembayar'
+                        validation={{
+                          required: 'Nama rekening pembayar tidak boleh kosong',
+                        }}
+                        className='w-full'
+                      />
+                      <Input
+                        id='bukti_pembayaran'
+                        label='Bukti Pembayaran'
+                        placeholder='Masukkan Link Gambar Bukti Pembayaran'
+                        validation={{
+                          required: 'Bukti pembayaran tidak boleh kosong',
+                          pattern: {
+                            value: REG_URL,
+                            message: 'URL tidak valid',
+                          },
+                        }}
+                        className='w-full'
+                      />
+                    </div>
+                    <Button
+                      type='submit'
                       className='w-full'
-                    />
-                    <Input
-                      id='bukti_pembayaran'
-                      label='Bukti Pembayaran'
-                      placeholder='Masukkan Link Gambar Bukti Pembayaran'
-                      validation={{
-                        required: 'Bukti pembayaran tidak boleh kosong',
-                        pattern: {
-                          value: REG_URL,
-                          message: 'URL tidak valid',
-                        },
-                      }}
-                      className='w-full'
-                    />
+                      isLoading={payCartIsLoading}
+                    >
+                      Bayar
+                    </Button>
                   </div>
+                ) : (
+                  <Button
+                    type='button'
+                    className='w-full'
+                    onClick={() => handlePinjam()}
+                  >
+                    Pinjam
+                  </Button>
                 )}
-
-                <Button
-                  type={isFormVisible ? 'submit' : 'button'}
-                  className='w-full'
-                  onClick={() => handlePinjam()}
-                  isLoading={payCartIsLoading}
-                >
-                  {isFormVisible ? 'Bayar' : 'Pinjam'}
-                </Button>
               </form>
             </FormProvider>
           </section>
