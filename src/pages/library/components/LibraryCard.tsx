@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError, AxiosResponse } from 'axios';
 import { differenceInCalendarDays, format } from 'date-fns';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -23,6 +24,7 @@ type LibraryCardProps = {
   author: Penulis;
   imageSrc: string;
   volume: number;
+  mangaId: number;
   rentDate: Date;
   dueDate: Date;
   fine: number;
@@ -41,6 +43,7 @@ export default function LibraryCard({
   author,
   imageSrc,
   volume,
+  mangaId,
   rentDate,
   dueDate,
   fine,
@@ -48,6 +51,7 @@ export default function LibraryCard({
 }: LibraryCardProps) {
   const methods = useForm<FinePayment>();
   const dialog = useDialog();
+  const router = useRouter();
   const { handleSubmit } = methods;
   const [src, setSrc] = useState(imageSrc);
   const [isOpen, setIsOpen] = useState(false);
@@ -68,9 +72,17 @@ export default function LibraryCard({
     });
   };
 
+  const handleClick = () => {
+    const url = `/manga/${mangaId}`;
+    router.push(url);
+  };
+
   return (
     <div className='flex flex-row w-full h-[244px] bg-base-light rounded-xl overflow-hidden'>
-      <div className='relative w-48 h-full cursor-pointer'>
+      <div
+        className='relative w-48 h-full cursor-pointer'
+        onClick={handleClick}
+      >
         <Image
           src={src}
           alt='manga-cover'
@@ -146,28 +158,29 @@ export default function LibraryCard({
         <div className='h-14 w-full' />
 
         <div className='absolute bottom-0 w-full h-14 p-2.5 bg-base-outline'>
-          {status === 'Sedang Dipinjam' && (
-            <div className='flex flex-row gap-2.5'>
-              {fine > 0 && (
-                <Button className='w-full' onClick={() => setIsOpen(true)}>
-                  Bayar Denda
+          {status === 'Sedang Dipinjam' ||
+            (status === 'Sudah Membayar Denda' && (
+              <div className='flex flex-row gap-2.5'>
+                {fine > 0 && status !== 'Sudah Membayar Denda' && (
+                  <Button className='w-full' onClick={() => setIsOpen(true)}>
+                    Bayar Denda
+                  </Button>
+                )}
+                <Button
+                  className='w-full'
+                  onClick={() => {
+                    dialog({
+                      title: 'Kembalikan Manga',
+                      description:
+                        'Mohon meminta tolong kepada pegawai Tamiyochi untuk mengautentikasi pengembalian manga. Silakan datang langsung secara offline ke toko Tamiyochi.',
+                      submitText: 'Baik',
+                    });
+                  }}
+                >
+                  Kembalikan
                 </Button>
-              )}
-              <Button
-                className='w-full'
-                onClick={() => {
-                  dialog({
-                    title: 'Kembalikan Manga',
-                    description:
-                      'Mohon meminta tolong kepada pegawai Tamiyochi untuk mengautentikasi pengembalian manga. Silakan datang langsung secara offline ke toko Tamiyochi.',
-                    submitText: 'Baik',
-                  });
-                }}
-              >
-                Kembalikan
-              </Button>
-            </div>
-          )}
+              </div>
+            ))}
           {status === 'Menunggu Konfirmasi' && (
             <Button
               variant='secondary'

@@ -48,7 +48,7 @@ function CartPage() {
 
   return (
     <Layout withNavbar>
-      <SEO />
+      <SEO title='Peminjaman' />
       <main className='min-h-screen bg-base-surface pt-[92px]'>
         <div className='px-12 py-8 flex gap-8'>
           <section className='space-y-8 flex-1'>
