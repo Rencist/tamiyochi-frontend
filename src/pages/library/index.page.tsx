@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
+import withAuth from '@/components/hoc/withAuth';
 import SEO from '@/components/SEO';
 import Typography from '@/components/typography/Typography';
 import Layout from '@/layouts/Layout';
@@ -7,7 +8,9 @@ import LibraryCard from '@/pages/library/components/LibraryCard';
 import { ApiReturn } from '@/types/api';
 import { Rent } from '@/types/entity/manga';
 
-export default function LibraryPage() {
+export default withAuth(LibraryPage, ['user']);
+
+function LibraryPage() {
   const { data: queryData } = useQuery<ApiReturn<Rent[]>>(['peminjaman']);
 
   return (
@@ -21,7 +24,7 @@ export default function LibraryPage() {
                 {queryData?.data.map((rent) => (
                   <LibraryCard
                     key={rent.id_peminjaman_manga}
-                    id={rent.id_peminjaman_manga}
+                    id={rent.id_peminjaman}
                     name={rent.judul}
                     author={rent.penulis[0]}
                     imageSrc={rent.foto}
@@ -29,6 +32,7 @@ export default function LibraryPage() {
                     rentDate={new Date(rent.tanggal_peminjaman)}
                     dueDate={new Date(rent.batas_pengembalian)}
                     fine={rent.denda}
+                    status={rent.status_peminjaman}
                   />
                 ))}
               </div>

@@ -70,10 +70,10 @@ export default function Navbar() {
               icon={BiShoppingBag}
               variant='unstyled'
               size='large'
-              iconClassName='text-4xl text-base-light'
+              iconClassName='text-4xl text-base-surface hover:text-teal-200'
             />
             <Popover className='relative'>
-              <Popover.Button className='flex justify-center items-center w-11 h-11 bg-base-light rounded-full'>
+              <Popover.Button className='flex justify-center items-center w-11 h-11 bg-base-light rounded-full outline-none'>
                 <BsFillPersonFill className='text-base-icon text-3xl' />
               </Popover.Button>
               <Popover.Panel className='absolute max-w-xs right-0 flex flex-col items-center gap-3 mt-3 p-3 bg-base-surface rounded-lg'>

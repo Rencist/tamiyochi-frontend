@@ -32,24 +32,23 @@ export default function VolumeCard({
 
   const [count, setCount] = useState(0);
 
-  const { mutateAsync: addCart } = useMutation<
+  const { mutateAsync: addCart, isLoading } = useMutation<
     AxiosResponse<ApiReturn<null>>,
     AxiosError<ApiError>,
-    { manga_id: number }
-  >((data: { manga_id: number }) => api.post('cart', data));
+    { manga_id: number; jumlah: number }
+  >((data: { manga_id: number; jumlah: number }) => api.post('cart', data));
 
   const handleAddCart = async () => {
     if (user)
-      for (let i = 0; i < count; i++)
-        await addCart(
-          { manga_id: mangaId },
-          {
-            onSuccess: () => {
-              onSubmit();
-              setCount(0);
-            },
-          }
-        );
+      await addCart(
+        { manga_id: mangaId, jumlah: count },
+        {
+          onSuccess: () => {
+            onSubmit();
+            setCount(0);
+          },
+        }
+      );
     else router.push('/login');
   };
   return (
@@ -130,6 +129,7 @@ export default function VolumeCard({
               leftIconClassName='text-lg'
               leftIcon={LuPlus}
               onClick={handleAddCart}
+              isLoading={isLoading}
             >
               Pinjaman
             </Button>
