@@ -7,6 +7,7 @@ import { LuMinus, LuPlus } from 'react-icons/lu';
 import { numericFormatter } from 'react-number-format';
 
 import Button from '@/components/buttons/Button';
+import withAuth from '@/components/hoc/withAuth';
 import Typography from '@/components/typography/Typography';
 import api from '@/lib/api';
 import { ApiError, ApiReturn } from '@/types/api';
@@ -16,7 +17,9 @@ type CartCardProps = {
   onChange?: () => void;
 } & CartItem;
 
-export default function CartCard({
+export default withAuth(CartCard, ['user']);
+
+function CartCard({
   manga_id,
   judul_seri,
   volume,
