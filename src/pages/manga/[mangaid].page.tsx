@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import withAuth from '@/components/hoc/withAuth';
 import Typography from '@/components/typography/Typography';
 import Layout from '@/layouts/Layout';
 import Comment from '@/pages/manga/container/Comment';
@@ -12,7 +13,9 @@ import Volume from '@/pages/manga/container/Volume';
 import { ApiReturn } from '@/types/api';
 import { Seri } from '@/types/entity/manga';
 
-export default function DetailManga() {
+export default withAuth(DetailManga, ['all']);
+
+function DetailManga() {
   const [src, setSrc] = useState('');
 
   const { mangaid } = useRouter().query;

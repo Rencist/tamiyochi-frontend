@@ -7,6 +7,7 @@ import { LuMinus, LuPlus } from 'react-icons/lu';
 import { numericFormatter } from 'react-number-format';
 
 import Button from '@/components/buttons/Button';
+import withAuth from '@/components/hoc/withAuth';
 import Typography from '@/components/typography/Typography';
 import api from '@/lib/api';
 import { ApiError, ApiReturn } from '@/types/api';
@@ -16,7 +17,9 @@ type CartCardProps = {
   onChange?: () => void;
 } & CartItem;
 
-export default function CartCard({
+export default withAuth(CartCard, ['user']);
+
+function CartCard({
   manga_id,
   judul_seri,
   volume,
@@ -32,8 +35,8 @@ export default function CartCard({
   const { mutateAsync: addCart } = useMutation<
     AxiosResponse<ApiReturn<null>>,
     AxiosError<ApiError>,
-    { manga_id: number }
-  >((data: { manga_id: number }) => api.post('cart', data));
+    { manga_id: number; jumlah: number }
+  >((data: { manga_id: number; jumlah: number }) => api.post('cart', data));
 
   const { mutateAsync: subtractCart } = useMutation<
     AxiosResponse<ApiReturn<null>>,
@@ -49,7 +52,7 @@ export default function CartCard({
 
   const handleAdd = () => {
     if (jumlah_tersedia <= 0) return;
-    addCart({ manga_id }).then(() => {
+    addCart({ manga_id, jumlah: 1 }).then(() => {
       if (onChange) onChange();
     });
   };

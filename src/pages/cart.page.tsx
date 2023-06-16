@@ -5,10 +5,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { numericFormatter } from 'react-number-format';
 
 import Button from '@/components/buttons/Button';
-import DropzoneInput from '@/components/form/DropzoneInput';
 import Input from '@/components/form/Input';
 import SEO from '@/components/SEO';
 import Typography from '@/components/typography/Typography';
+import { REG_URL } from '@/constant/regex';
 import Layout from '@/layouts/Layout';
 import api from '@/lib/api';
 import CartCard from '@/pages/dashboard/components/CartCard';
@@ -18,10 +18,16 @@ import { Cart, CartPayment } from '@/types/entity/cart';
 export default function CartPage() {
   const [isFormVisible, setIsFormVisible] = React.useState<boolean>(false);
 
-  const methods = useForm<CartPayment>();
+  const methods = useForm<CartPayment>({
+    mode: 'onSubmit',
+  });
   const { handleSubmit } = methods;
 
-  const { mutate: payCart, isLoading: payCartIsLoading } = useMutation<
+  const { data: cartData, refetch: refetchCart } = useQuery<ApiReturn<Cart>>([
+    'cart',
+  ]);
+
+  const { mutateAsync: payCart, isLoading: payCartIsLoading } = useMutation<
     AxiosResponse<ApiReturn<null>> | void,
     AxiosError<ApiError>,
     CartPayment
@@ -32,10 +38,10 @@ export default function CartPage() {
   };
 
   const onSubmit = (data: CartPayment) => {
-    payCart(data);
+    payCart(data)
+      .then(() => refetchCart())
+      .then(() => setIsFormVisible(false));
   };
-
-  const { data: cartData, refetch } = useQuery<ApiReturn<Cart>>(['cart']);
 
   return (
     <Layout withNavbar>
@@ -44,7 +50,7 @@ export default function CartPage() {
         <div className='px-12 py-8 flex gap-8'>
           <section className='space-y-8 flex-1'>
             {cartData?.data?.cart?.map((cartItem, index) => (
-              <CartCard key={index} {...cartItem} onChange={refetch} />
+              <CartCard key={index} {...cartItem} onChange={refetchCart} />
             ))}
           </section>
 
@@ -102,11 +108,22 @@ export default function CartPage() {
                       id='atas_nama'
                       label='Atas Nama'
                       placeholder='Masukkan Nama Rekening Pembayar'
+                      validation={{
+                        required: 'Nama rekening pembayar tidak boleh kosong',
+                      }}
                       className='w-full'
                     />
-                    <DropzoneInput
+                    <Input
                       id='bukti_pembayaran'
                       label='Bukti Pembayaran'
+                      placeholder='Masukkan Link Gambar Bukti Pembayaran'
+                      validation={{
+                        required: 'Bukti pembayaran tidak boleh kosong',
+                        pattern: {
+                          value: REG_URL,
+                          message: 'URL tidak valid',
+                        },
+                      }}
                       className='w-full'
                     />
                   </div>
