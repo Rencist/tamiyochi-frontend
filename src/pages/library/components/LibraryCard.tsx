@@ -158,29 +158,29 @@ export default function LibraryCard({
         <div className='h-14 w-full' />
 
         <div className='absolute bottom-0 w-full h-14 p-2.5 bg-base-outline'>
-          {status === 'Sedang Dipinjam' ||
-            (status === 'Sudah Membayar Denda' && (
-              <div className='flex flex-row gap-2.5'>
-                {fine > 0 && status !== 'Sudah Membayar Denda' && (
-                  <Button className='w-full' onClick={() => setIsOpen(true)}>
-                    Bayar Denda
-                  </Button>
-                )}
-                <Button
-                  className='w-full'
-                  onClick={() => {
-                    dialog({
-                      title: 'Kembalikan Manga',
-                      description:
-                        'Mohon meminta tolong kepada pegawai Tamiyochi untuk mengautentikasi pengembalian manga. Silakan datang langsung secara offline ke toko Tamiyochi.',
-                      submitText: 'Baik',
-                    });
-                  }}
-                >
-                  Kembalikan
+          {(status === 'Sedang Dipinjam' ||
+            status === 'Sudah Membayar Denda') && (
+            <div className='flex flex-row gap-2.5'>
+              {fine > 0 && status !== 'Sudah Membayar Denda' && (
+                <Button className='w-full' onClick={() => setIsOpen(true)}>
+                  Bayar Denda
                 </Button>
-              </div>
-            ))}
+              )}
+              <Button
+                className='w-full'
+                onClick={() => {
+                  dialog({
+                    title: 'Kembalikan Manga',
+                    description:
+                      'Mohon meminta tolong kepada pegawai Tamiyochi untuk mengautentikasi pengembalian manga. Silakan datang langsung secara offline ke toko Tamiyochi.',
+                    submitText: 'Baik',
+                  });
+                }}
+              >
+                Kembalikan
+              </Button>
+            </div>
+          )}
           {status === 'Menunggu Konfirmasi' && (
             <Button
               variant='secondary'
